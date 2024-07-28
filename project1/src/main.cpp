@@ -9,6 +9,8 @@ and may not be redistributed without written permission.*/
 #include "core/global.h"
 #include "core/config.h"
 #include <string>
+#include "classes/block.h"
+#include "classes/block.cpp"
 
 
 
@@ -154,7 +156,7 @@ void close()
 	IMG_Quit();
 	SDL_Quit();
 }
-
+//CHANGE THIS TO TAKE MULTIPLE CLASSES
 void renderScreen(Paddle myObject){
     SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
     SDL_RenderClear( gRenderer );
@@ -162,6 +164,12 @@ void renderScreen(Paddle myObject){
     
 
     myObject.render();
+	SDL_Rect rect;
+	//temp draw blocks
+	srand(time(NULL));
+    cur=blocks[rand() % 7];
+	rect.w=rect.h=TILE_SIZE;
+	draw(cur, rect);
         
     SDL_RenderPresent( gRenderer );
 
