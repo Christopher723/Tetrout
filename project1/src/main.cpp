@@ -130,7 +130,7 @@ bool loadMedia()
 	bool success = true;
 
 	//Load dot texture
-	if( !gPaddleTexture.loadFromFile( "Paddle.bmp" ) )
+	if( !gPaddleTexture.loadFromFile( "src/assets/Paddle.bmp" ) )
 	{
 		printf( "Failed to load Paddle texture!\n" );
 		success = false;
