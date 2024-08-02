@@ -76,7 +76,15 @@ void Paddle::move( SDL_Rect& wall )
     }
 }
 
-void Paddle::render()
+void Paddle::render(SDL_Renderer *renderer)
 {
-	gPaddleTexture.render( mPosX, mPosY );
+	
+
+
+    // SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    
+    gPaddleTexture.render( mPosX, mPosY );
+    // myObject.render();
+    // SDL_RenderPresent( gRenderer );
+    
 }

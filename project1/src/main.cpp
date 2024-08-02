@@ -9,12 +9,81 @@ and may not be redistributed without written permission.*/
 #include "core/global.h"
 #include "core/config.h"
 #include <string>
-#include "classes/block.h"
-#include "classes/block.cpp"
+
 
 
 
 //Texture wrapper class
+
+
+
+
+
+//individual block
+struct block {
+ SDL_Color color;
+ bool active;
+};
+
+//shape such as I, T, L, etc
+struct shape {
+ SDL_Color color;
+ bool matrix[4][4];
+ double x, y;
+ int size;
+};
+
+shape blocks[7] = {{{255,165,0},
+{{0,0,1,0} // L BLOCK
+,{1,1,1,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,3}
+,{{255,0,0}, // Z BLOCK
+{{1,1,0,0}
+,{0,1,1,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,3}
+,{{224,255,255}, // I BLOCK
+{{1,1,1,1}
+,{0,0,0,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,4}
+,{{0,0,255}, // J BLOCK
+{{1,0,0,0}
+,{1,1,1,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,3}
+,{{255,255,0}, // O BLOCK
+{{1,1,0,0}
+,{1,1,0,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,2}
+,{{0,0,255}, // S BLOCK
+{{0,1,1,0}
+,{1,1,0,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,3}
+,{{128,0,128}, // T BLOCK
+{{0,1,0,0}
+,{1,1,1,0}
+,{0,0,0,0}
+,{0,0,0,0}
+},5,4,3}}, cur;
+
+
+
+
+void update() {
+    cur.y += 0.3;
+}
+
+
 
 
 //The application time based timer
@@ -59,9 +128,12 @@ bool loadMedia();
 //Frees media and shuts down SDL
 void close();
 
+void render();
+void draw(shape s);
+
 bool checkCollision( SDL_Rect a, SDL_Rect b );
 
-void renderScreen();
+
 
 
 SDL_Window* gWindow = NULL;
@@ -70,7 +142,26 @@ LTexture gPaddleTexture;
 
 
 
-
+void render() {
+    // SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
+    // SDL_RenderClear(gRenderer);
+    draw(cur);
+    // SDL_RenderPresent(gRenderer);
+}
+SDL_Rect rect;
+void draw(shape s) {
+    for(int i=0; i<s.size; i++) {
+        for(int j=0; j<s.size; j++) {
+            if(s.matrix[i][j]) {
+                rect.x=(s.x+i)*TILE_SIZE; rect.y=(s.y+j)*TILE_SIZE;
+                SDL_SetRenderDrawColor(gRenderer, s.color.r, s.color.g, s.color.b, 255);
+                SDL_RenderFillRect(gRenderer, &rect);
+                SDL_SetRenderDrawColor(gRenderer, 219, 219, 219, 255);
+                SDL_RenderDrawRect(gRenderer, &rect);
+            }
+        }
+    }
+}
 
 bool init()
 {
@@ -157,23 +248,16 @@ void close()
 	SDL_Quit();
 }
 //CHANGE THIS TO TAKE MULTIPLE CLASSES
-void renderScreen(Paddle myObject){
-    SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-    SDL_RenderClear( gRenderer );
+// void renderScreen(Paddle myObject){
+//     SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+//     SDL_RenderClear( gRenderer );
 
     
 
-    myObject.render();
-	SDL_Rect rect;
-	//temp draw blocks
-	srand(time(NULL));
-    cur=blocks[rand() % 7];
-	rect.w=rect.h=TILE_SIZE;
-	draw(cur, rect);
-        
-    SDL_RenderPresent( gRenderer );
+//     myObject.render();
+//     SDL_RenderPresent( gRenderer );
 
-}
+// }
 				
 
 int main( int argc, char* args[] )
@@ -206,7 +290,11 @@ int main( int argc, char* args[] )
 			wall.y = 40;
 			wall.w = 40;
 			wall.h = 400;
-
+			cur = blocks[1];
+			rect.w=rect.h=TILE_SIZE;
+			cur.x = 5;
+			cur.y = 1;
+			
 
 			//While application is running
 			while( !quit )
@@ -227,9 +315,22 @@ int main( int argc, char* args[] )
 
 				//Move the dot
 				paddle.move( wall );
-				SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );        
-                SDL_RenderDrawRect( gRenderer, &wall );
-				renderScreen(paddle);
+				// SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );        
+                // SDL_RenderDrawRect( gRenderer, &wall );
+				//dont know what this does?
+				
+
+				update();
+				// render();
+
+				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+				SDL_RenderClear(gRenderer);  // Clear the screen with black
+
+				draw(cur);  // Draw the shape `cur`
+				paddle.render(gRenderer);  // Draw the paddle
+
+				SDL_RenderPresent(gRenderer); 
+				
 
 				
 			}

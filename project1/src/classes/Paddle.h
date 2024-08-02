@@ -23,7 +23,7 @@ class Paddle
 		void move( SDL_Rect& wall );
 
 		//Shows the dot on the screen
-		void render();
+		void render(SDL_Renderer *renderer);
 
     private:
 		//The X and Y offsets of the dot
