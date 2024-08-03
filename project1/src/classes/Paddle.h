@@ -7,6 +7,7 @@ class Paddle
 {
     public:
 		//The dimensions of the dot
+		SDL_Rect mCollider;
 		static const int PADDLE_WIDTH = 40;
 		static const int PADDLE_HEIGHT = 20;
 
@@ -32,6 +33,6 @@ class Paddle
 		//The velocity of the dot
 		int mVelX, mVelY;
 
-		SDL_Rect mCollider;
+		
 };
 #endif

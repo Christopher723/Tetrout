@@ -3,7 +3,7 @@
 #include "Paddle.h"
 #include "../core/config.h"
 #include "../core/global.h"
-#include "../core/collision.cpp"
+#include "../core/collision.h"
 
 
 

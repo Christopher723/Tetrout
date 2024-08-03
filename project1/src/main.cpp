@@ -9,6 +9,7 @@ and may not be redistributed without written permission.*/
 #include "core/global.h"
 #include "core/config.h"
 #include <string>
+#include "classes/Block.h"
 
 
 
@@ -19,69 +20,65 @@ and may not be redistributed without written permission.*/
 
 
 
-//individual block
-struct block {
- SDL_Color color;
- bool active;
-};
+// //individual block
+// struct block {
+//  SDL_Color color;
+//  bool active;
+// };
 
-//shape such as I, T, L, etc
-struct shape {
- SDL_Color color;
- bool matrix[4][4];
- double x, y;
- int size;
-};
+// //shape such as I, T, L, etc
+// struct shape {
+//  SDL_Color color;
+//  bool matrix[4][4];
+//  double x, y;
+//  int w, h;
+//  SDL_Rect mCollider;
+//  int size;
+//  bool bounce;
+// };
 
-shape blocks[7] = {{{255,165,0},
+Shape blocks[7] = {{{255,165,0},
 {{0,0,1,0} // L BLOCK
 ,{1,1,1,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,3}
+},5,4,3,2,3, false}
 ,{{255,0,0}, // Z BLOCK
 {{1,1,0,0}
 ,{0,1,1,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,3}
+},5,4,3,2,3,false}
 ,{{224,255,255}, // I BLOCK
 {{1,1,1,1}
 ,{0,0,0,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,4}
+},5,4,4,2,3,false}
 ,{{0,0,255}, // J BLOCK
 {{1,0,0,0}
 ,{1,1,1,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,3}
+},5,4,3,2,3,false}
 ,{{255,255,0}, // O BLOCK
 {{1,1,0,0}
 ,{1,1,0,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,2}
+},5,4,2,2,3,false}
 ,{{0,0,255}, // S BLOCK
 {{0,1,1,0}
 ,{1,1,0,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,3}
+},5,4,3,2,3,false}
 ,{{128,0,128}, // T BLOCK
 {{0,1,0,0}
 ,{1,1,1,0}
 ,{0,0,0,0}
 ,{0,0,0,0}
-},5,4,3}}, cur;
-
-
-
-
-void update() {
-    cur.y += 0.3;
-}
+},5,4,3,2,3,false}}, cur;
 
 
 
@@ -129,7 +126,7 @@ bool loadMedia();
 void close();
 
 void render();
-void draw(shape s);
+void draw(Shape s);
 
 bool checkCollision( SDL_Rect a, SDL_Rect b );
 
@@ -142,26 +139,9 @@ LTexture gPaddleTexture;
 
 
 
-void render() {
-    // SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, 255);
-    // SDL_RenderClear(gRenderer);
-    draw(cur);
-    // SDL_RenderPresent(gRenderer);
-}
+
 SDL_Rect rect;
-void draw(shape s) {
-    for(int i=0; i<s.size; i++) {
-        for(int j=0; j<s.size; j++) {
-            if(s.matrix[i][j]) {
-                rect.x=(s.x+i)*TILE_SIZE; rect.y=(s.y+j)*TILE_SIZE;
-                SDL_SetRenderDrawColor(gRenderer, s.color.r, s.color.g, s.color.b, 255);
-                SDL_RenderFillRect(gRenderer, &rect);
-                SDL_SetRenderDrawColor(gRenderer, 219, 219, 219, 255);
-                SDL_RenderDrawRect(gRenderer, &rect);
-            }
-        }
-    }
-}
+
 
 bool init()
 {
@@ -315,18 +295,22 @@ int main( int argc, char* args[] )
 
 				//Move the dot
 				paddle.move( wall );
+
+				cur.checkPaddleCollision(paddle.mCollider);
+				
+				
 				// SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );        
                 // SDL_RenderDrawRect( gRenderer, &wall );
 				//dont know what this does?
 				
 
-				update();
-				// render();
+				cur.update();
+				
 
 				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 				SDL_RenderClear(gRenderer);  // Clear the screen with black
 
-				draw(cur);  // Draw the shape `cur`
+				cur.draw(rect);  // Draw the shape `cur`
 				paddle.render(gRenderer);  // Draw the paddle
 
 				SDL_RenderPresent(gRenderer); 
