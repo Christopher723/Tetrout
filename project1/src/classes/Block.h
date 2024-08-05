@@ -12,15 +12,23 @@ struct Block {
 //shape such as I, T, L, etc
 struct Shape {
 
+    // Shape(SDL_Color color, std::array<std::array<bool, 4>, 4> grid, int x, int y, int w, int h, int bounceAmount, bool active);
+    Shape(SDL_Color color, bool grid[4][4], int x, int y, int w, int h, int bounceAmount);
+    // Shape(bool grid[4][4]);
     void update();
     void draw(SDL_Rect rect);
     void checkPaddleCollision(SDL_Rect otherCollider);
+    void checkWallCollision(SDL_Rect otherCollider);
+
+
     SDL_Color color;
     bool matrix[4][4];
     SDL_Rect mColliders[4][4];
-    double x, y;
+    int x, y;
     int w, h;
-    int size;
+    int bounceAmount;
     bool bounce;
+    
 };
+
 #endif 

@@ -1,21 +1,53 @@
 
 #include <SDL2/SDL.h>
 
+#include <array>
 #include "Block.h"
 #include "../core/config.h"
 #include "../core/global.h"
 #include "../core/collision.h"
 
 
+// Shape::Shape(SDL_Color color, std::array<std::array<bool, 4>, 4> grid, int x, int y, int w, int h, int bounceAmount, bool active)
+// {
+//     color = color;
+    // for (int i = 0; i < 4; ++i) {
+    //         for (int j = 0; j < 4; ++j) {
+    //             matrix[i][j] = grid[i][j];
+    //         }
+    //     }
+//     x = x;
+//     y = y;
+//     w = w;
+//     h = h;
+//     bounceAmount = bounceAmount;
+//     bounce = active;
+// }
+
+Shape::Shape(SDL_Color color, bool grid[4][4], int x, int y, int w, int h, int bounceAmount){
+    this->color = color;
+    this->x = x;
+    this->y = y;
+    this->w = w;
+    this->h = h;
+    this->bounceAmount = bounceAmount;
+
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            matrix[i][j] = grid[i][j];
+        }
+    }
+}
+
+
 
 
 
 void Shape::update() {
-	if (bounce) {
-		y -= 2;
-	}
-	else{y += 2;}
-    
+
+    printf("bounceAmount: %d\n", bounceAmount);
+	y += bounceAmount;
+
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             if (matrix[i][j]) {
@@ -57,7 +89,20 @@ void Shape::checkPaddleCollision(SDL_Rect paddleCollider){
         for (int j = 0; j < 4; ++j) {
             if (matrix[i][j]) {
                 if (checkCollision(mColliders[i][j], paddleCollider)) {
-                    bounce = true;
+                    bounce = bounceAmount = -2;
+                }
+            }
+        }
+    }
+}
+
+void Shape::checkWallCollision(SDL_Rect wall){
+        for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            if (matrix[i][j]) {
+                if (checkCollision(mColliders[i][j], wall)) {
+                    bounceAmount = 0;
+                    printf("new AMOUNT: %d\n", bounceAmount);
                 }
             }
         }

@@ -13,72 +13,61 @@ and may not be redistributed without written permission.*/
 
 
 
+// Shape blocks[7] = {{{255,165,0},
+// {{0,0,1,0} // L BLOCK
+// ,{1,1,1,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,3,2,3,2, false}
+// ,{{255,0,0}, // Z BLOCK
+// {{1,1,0,0}
+// ,{0,1,1,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,3,2,3,2,false}
+// ,{{224,255,255}, // I BLOCK
+// {{1,1,1,1}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,4,2,3,2,false}
+// ,{{0,0,255}, // J BLOCK
+// {{1,0,0,0}
+// ,{1,1,1,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,3,2,3,2,false}
+// ,{{255,255,0}, // O BLOCK
+// {{1,1,0,0}
+// ,{1,1,0,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,2,2,3,2,false}
+// ,{{0,0,255}, // S BLOCK
+// {{0,1,1,0}
+// ,{1,1,0,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,3,2,3,2,false}
+// ,{{128,0,128}, // T BLOCK
+// {{0,1,0,0}
+// ,{1,1,1,0}
+// ,{0,0,0,0}
+// ,{0,0,0,0}
+// },5,4,3,2,3,2,false}}, cur;
 
-//Texture wrapper class
+bool lBlock[4][4] = {
+        {0, 0, 1, 0},
+        {1, 1, 1, 0},
+        {0, 0, 0, 0},
+        {0, 0, 0, 0}
+};
 
 
+SDL_Color red = {255,165,0};
 
+Shape cur(red, lBlock, 5, 15, 3, 2, 2);
 
-
-// //individual block
-// struct block {
-//  SDL_Color color;
-//  bool active;
-// };
-
-// //shape such as I, T, L, etc
-// struct shape {
-//  SDL_Color color;
-//  bool matrix[4][4];
-//  double x, y;
-//  int w, h;
-//  SDL_Rect mCollider;
-//  int size;
-//  bool bounce;
-// };
-
-Shape blocks[7] = {{{255,165,0},
-{{0,0,1,0} // L BLOCK
-,{1,1,1,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,3,2,3, false}
-,{{255,0,0}, // Z BLOCK
-{{1,1,0,0}
-,{0,1,1,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,3,2,3,false}
-,{{224,255,255}, // I BLOCK
-{{1,1,1,1}
-,{0,0,0,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,4,2,3,false}
-,{{0,0,255}, // J BLOCK
-{{1,0,0,0}
-,{1,1,1,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,3,2,3,false}
-,{{255,255,0}, // O BLOCK
-{{1,1,0,0}
-,{1,1,0,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,2,2,3,false}
-,{{0,0,255}, // S BLOCK
-{{0,1,1,0}
-,{1,1,0,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,3,2,3,false}
-,{{128,0,128}, // T BLOCK
-{{0,1,0,0}
-,{1,1,1,0}
-,{0,0,0,0}
-,{0,0,0,0}
-},5,4,3,2,3,false}}, cur;
 
 
 
@@ -227,17 +216,7 @@ void close()
 	IMG_Quit();
 	SDL_Quit();
 }
-//CHANGE THIS TO TAKE MULTIPLE CLASSES
-// void renderScreen(Paddle myObject){
-//     SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
-//     SDL_RenderClear( gRenderer );
 
-    
-
-//     myObject.render();
-//     SDL_RenderPresent( gRenderer );
-
-// }
 				
 
 int main( int argc, char* args[] )
@@ -266,14 +245,15 @@ int main( int argc, char* args[] )
 			Paddle paddle;
 
 			SDL_Rect wall;
-			wall.x = 300;
-			wall.y = 40;
-			wall.w = 40;
-			wall.h = 400;
-			cur = blocks[1];
+			wall.x = 0;
+			wall.y = 0;
+			wall.w = SCREEN_WIDTH;
+			wall.h = 1;
+			// cur = blocks[2];
+			// cur.bounceAmount = 0;
 			rect.w=rect.h=TILE_SIZE;
-			cur.x = 5;
-			cur.y = 1;
+			// cur.x = 5;
+			// cur.y = 1;
 			
 
 			//While application is running
@@ -297,6 +277,7 @@ int main( int argc, char* args[] )
 				paddle.move( wall );
 
 				cur.checkPaddleCollision(paddle.mCollider);
+				cur.checkWallCollision(wall);
 				
 				
 				// SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );        
@@ -312,6 +293,7 @@ int main( int argc, char* args[] )
 
 				cur.draw(rect);  // Draw the shape `cur`
 				paddle.render(gRenderer);  // Draw the paddle
+				SDL_RenderFillRect(gRenderer, &wall);
 
 				SDL_RenderPresent(gRenderer); 
 				
