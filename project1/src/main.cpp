@@ -3,6 +3,7 @@ and may not be redistributed without written permission.*/
 
 //Using SDL, SDL_image, standard IO, and strings
 #include <SDL2/SDL.h>
+#include <vector>
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include "classes/Paddle.h"
@@ -10,6 +11,7 @@ and may not be redistributed without written permission.*/
 #include "core/config.h"
 #include <string>
 #include "classes/Block.h"
+#include <random>
 
 
 
@@ -63,10 +65,59 @@ bool lBlock[4][4] = {
         {0, 0, 0, 0}
 };
 
+bool zBlock[4][4] = {
+		{1, 1, 0, 0},
+		{0, 1, 1, 0},
+		{0, 0, 0, 0},
+		{0, 0, 0, 0}
+};
+bool iBlock[4][4] = {
+	{1,1,1,1},
+	{0,0,0,0},
+	{0,0,0,0},
+	{0,0,0,0}
+};
+bool jBlock[4][4] = {
+	{1, 0, 0, 0},
+	{1, 1, 1, 0},
+	{0, 0, 0, 0},
+	{0, 0, 0, 0}
+};
+bool oBlock[4][4] = {
+	{1,1,0,0}
+	,{1,1,0,0}
+	,{0,0,0,0}
+	,{0,0,0,0}
+};
+bool sBlock[4][4] = {
+	{0,1,1,0}
+	,{1,1,0,0}
+	,{0,0,0,0}
+	,{0,0,0,0}
+};
+bool tBlock[4][4] = {
+	{0,1,0,0}
+	,{1,1,1,0}
+	,{0,0,0,0}
+	,{0,0,0,0}
+};
 
-SDL_Color red = {255,165,0};
 
-Shape cur(red, lBlock, 5, 15, 3, 2, 2);
+bool (*blocks[7])[4] = {lBlock, zBlock, iBlock, jBlock, oBlock, sBlock, tBlock};
+SDL_Color colors[7] = {{255,165,0}, {255,0,0}, {224,255,255}, {0,0,255}, {255,255,0}, {128,0,128}};
+std::vector<Shape> placedBlocks;
+
+
+// Initialize random number generator
+std::random_device rd;  // Seed
+std::mt19937 gen(rd()); // Mersenne Twister engine
+std::uniform_int_distribution<> dis(0, 6); // Distribution range
+
+// Generate a random index for blocks
+int randomIndex = dis(gen);
+
+
+Shape cur(colors[randomIndex], blocks[randomIndex], 5, 15, 3, 2, 2);
 
 
 
@@ -249,11 +300,9 @@ int main( int argc, char* args[] )
 			wall.y = 0;
 			wall.w = SCREEN_WIDTH;
 			wall.h = 1;
-			// cur = blocks[2];
-			// cur.bounceAmount = 0;
+	
 			rect.w=rect.h=TILE_SIZE;
-			// cur.x = 5;
-			// cur.y = 1;
+			
 			
 
 			//While application is running
@@ -275,9 +324,19 @@ int main( int argc, char* args[] )
 
 				//Move the dot
 				paddle.move( wall );
+				
 
 				cur.checkPaddleCollision(paddle.mCollider);
-				cur.checkWallCollision(wall);
+				if (cur.checkWallCollision(wall)){
+					randomIndex = dis(gen);
+					placedBlocks.push_back(cur);
+					cur = Shape(colors[randomIndex], blocks[randomIndex], 5, 4, 3, 2, 2);
+					printf("cur x: %d\b", placedBlocks[1].color.r);
+
+				}
+
+
+				
 				
 				
 				// SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );        
@@ -291,6 +350,9 @@ int main( int argc, char* args[] )
 				SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
 				SDL_RenderClear(gRenderer);  // Clear the screen with black
 
+				for (int i = 0; i < placedBlocks.size(); i++) {
+					placedBlocks[i].draw(rect);
+				}
 				cur.draw(rect);  // Draw the shape `cur`
 				paddle.render(gRenderer);  // Draw the paddle
 				SDL_RenderFillRect(gRenderer, &wall);

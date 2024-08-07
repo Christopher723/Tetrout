@@ -40,6 +40,8 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "algorithm": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "vector": "cpp",
+        "__split_buffer": "cpp"
     }
 }

@@ -45,7 +45,7 @@ Shape::Shape(SDL_Color color, bool grid[4][4], int x, int y, int w, int h, int b
 
 void Shape::update() {
 
-    printf("bounceAmount: %d\n", bounceAmount);
+    // printf("bounceAmount: %d\n", bounceAmount);
 	y += bounceAmount;
 
     for (int i = 0; i < 4; ++i) {
@@ -96,15 +96,16 @@ void Shape::checkPaddleCollision(SDL_Rect paddleCollider){
     }
 }
 
-void Shape::checkWallCollision(SDL_Rect wall){
+bool Shape::checkWallCollision(SDL_Rect wall){
         for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
             if (matrix[i][j]) {
                 if (checkCollision(mColliders[i][j], wall)) {
                     bounceAmount = 0;
-                    printf("new AMOUNT: %d\n", bounceAmount);
+                    return true;
                 }
             }
         }
     }
+    return false;
 }
