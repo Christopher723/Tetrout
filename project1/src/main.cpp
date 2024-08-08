@@ -11,7 +11,9 @@ and may not be redistributed without written permission.*/
 #include "core/config.h"
 #include <string>
 #include "classes/Block.h"
-#include <random>
+#include "core/randomGen.h"
+
+
 
 
 
@@ -106,15 +108,8 @@ bool tBlock[4][4] = {
 bool (*blocks[7])[4] = {lBlock, zBlock, iBlock, jBlock, oBlock, sBlock, tBlock};
 SDL_Color colors[7] = {{255,165,0}, {255,0,0}, {224,255,255}, {0,0,255}, {255,255,0}, {128,0,128}};
 std::vector<Shape> placedBlocks;
-
-
-// Initialize random number generator
-std::random_device rd;  // Seed
-std::mt19937 gen(rd()); // Mersenne Twister engine
-std::uniform_int_distribution<> dis(0, 6); // Distribution range
-
-// Generate a random index for blocks
-int randomIndex = dis(gen);
+RandomGen randomGen;
+int randomIndex = randomGen.getRandomInt(0, 6);
 
 
 Shape cur(colors[randomIndex], blocks[randomIndex], 5, 15, 3, 2, 2);
@@ -187,7 +182,7 @@ bool init()
 {
 	//Initialization flag
 	bool success = true;
-
+	
 	//Initialize SDL
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
 	{
@@ -328,7 +323,7 @@ int main( int argc, char* args[] )
 
 				cur.checkPaddleCollision(paddle.mCollider);
 				if (cur.checkWallCollision(wall)){
-					randomIndex = dis(gen);
+					randomIndex = randomGen.getRandomInt(0, 6);
 					placedBlocks.push_back(cur);
 					cur = Shape(colors[randomIndex], blocks[randomIndex], 5, 4, 3, 2, 2);
 					printf("cur x: %d\b", placedBlocks[1].color.r);
