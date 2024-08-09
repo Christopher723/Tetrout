@@ -111,8 +111,8 @@ std::vector<Shape> placedBlocks;
 RandomGen randomGen;
 int randomIndex = randomGen.getRandomInt(0, 6);
 
-
-Shape cur(colors[randomIndex], blocks[randomIndex], 5, 15, 3, 2, 2);
+//x y, w, h, bounceAmount
+Shape cur(colors[randomIndex], blocks[randomIndex], SCREEN_WIDTH/2, 15, 3, 2, 2);
 
 
 
@@ -325,7 +325,7 @@ int main( int argc, char* args[] )
 				if (cur.checkWallCollision(wall)){
 					randomIndex = randomGen.getRandomInt(0, 6);
 					placedBlocks.push_back(cur);
-					cur = Shape(colors[randomIndex], blocks[randomIndex], 5, 4, 3, 2, 2);
+					cur = Shape(colors[randomIndex], blocks[randomIndex], SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 3, 2, 2);
 					printf("cur x: %d\b", placedBlocks[1].color.r);
 
 				}

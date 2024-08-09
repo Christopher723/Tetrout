@@ -11,7 +11,7 @@ Paddle::Paddle()
 {
     //Initialize the offsets
     mPosX = SCREEN_WIDTH/2;
-    mPosY = SCREEN_HEIGHT/1.3;
+    mPosY = SCREEN_HEIGHT/1.1;
 
     mCollider.w = PADDLE_WIDTH;
     mCollider.h = PADDLE_HEIGHT;

@@ -9,28 +9,6 @@
 
 
 
-
-// Shape::Shape(SDL_Color color, std::array<std::array<bool, 4>, 4> grid, int x, int y, int w, int h, int bounceAmount, bool active)
-// {
-//     color = color;
-    // for (int i = 0; i < 4; ++i) {
-    //         for (int j = 0; j < 4; ++j) {
-    //             matrix[i][j] = grid[i][j];
-    //         }
-    //     }
-//     x = x;
-//     y = y;
-//     w = w;
-//     h = h;
-//     bounceAmount = bounceAmount;
-//     bounce = active;
-// }
-
-
-
-// Generate a random index for blocks
-
-
 Shape::Shape(SDL_Color color, bool grid[4][4], int x, int y, int w, int h, int bounceAmount){
     this->color = color;
     this->x = x;
@@ -46,7 +24,7 @@ Shape::Shape(SDL_Color color, bool grid[4][4], int x, int y, int w, int h, int b
             matrix[i][j] = grid[i][j];
         }
     }
-   randomIndex2 = randomGen.getRandomFloat(1,1.5);
+   randomIndex2 = randomGen.getRandomFloat(-1.5,1.5);
 }
 
 
@@ -115,11 +93,12 @@ bool Shape::checkWallCollision(SDL_Rect wall){
                     bounceAmount = 0;
                     return true;
                 }
-                if(( x < 0 ) || ( x + (w * TILE_SIZE)> SCREEN_WIDTH ))
+                if(( x < 0 ) || ( x + (w * TILE_SIZE) > SCREEN_WIDTH ))
                 {
                     //Move back
                     xDirection = -1;
                 };
+                
             }
         }
     }
