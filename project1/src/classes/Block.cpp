@@ -104,3 +104,11 @@ bool Shape::checkWallCollision(SDL_Rect wall){
     }
     return false;
 }
+
+bool Shape::checkBounds(){
+    if(( y + (h * TILE_SIZE) > SCREEN_HEIGHT + 50 ))
+    {
+        return true;
+    }
+    return false;
+}

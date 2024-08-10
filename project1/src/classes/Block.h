@@ -19,6 +19,7 @@ struct Shape {
         void draw(SDL_Rect rect);
         void checkPaddleCollision(SDL_Rect otherCollider);
         bool checkWallCollision(SDL_Rect otherCollider);
+        bool checkBounds();
 
 
         SDL_Color color;

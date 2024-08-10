@@ -326,10 +326,13 @@ int main( int argc, char* args[] )
 					randomIndex = randomGen.getRandomInt(0, 6);
 					placedBlocks.push_back(cur);
 					cur = Shape(colors[randomIndex], blocks[randomIndex], SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 3, 2, 2);
-					printf("cur x: %d\b", placedBlocks[1].color.r);
-
 				}
-
+				if (cur.checkBounds()){
+					quit = true;
+					// randomIndex = randomGen.getRandomInt(0, 6);
+					// cur = Shape(colors[randomIndex], blocks[randomIndex], SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 3, 2, 2);
+					
+				}
 
 				
 				
